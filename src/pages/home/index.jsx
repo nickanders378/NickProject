@@ -1,35 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect } from 'react'
+import './style.css'
+import Trash from '../../assets/lixeira.png'
+import api from '../../services/api'
 
-function App() {
-  const [count, setCount] = useState(0)
 
+function Home() {
+
+let users = []
+
+  async function getUsers() {
+    users = await api.get('/users')
+  }
+  useEffect(() => {
+    getUsers()
+  }, [])
+  
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className='container'>
+      <form action="">
+        <h1>Cadastro Usuário</h1>  
+        <input type="text" name='' id='' placeholder='Entre com seu nome'/>
+        <input type="text" name='' id='' placeholder='Entre com seu e-mail'/>
+        <input type="number" name='age'/>
+        <button type='button'> Cadastrar</button>
+      </form>
+
+      {users.map((user) => (
+        <div key={user.id} className='card'>
+          <div>
+            <p>Nome: <span>{user.name}</span></p>
+            <p>Email: <span>{user.email}</span></p>
+            <p>Age: <span>{user.age}</span></p>
+          </div>
+          
+          <button>
+            <img src={Trash} alt="Trash" />
+          </button>
+        </div>
+
+      ))}
+    </div>
   )
 }
 
-export default App
+export default Home
